@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 // actions de redux
 import { crearNuevoProducto } from '../actions/productoAction'
 
 const NuevoProducto = () => {
 
+	const navigate = useNavigate()
 	// state del componente
 	const [nombre, setNombre ] =  useState('');
 	const [precio, setPrecio ] =  useState(0);
@@ -13,8 +15,8 @@ const NuevoProducto = () => {
 	// utilizar useDispatch y te crea una función
 	const dispatch = useDispatch();
 
-	// mandar a llamar el action de productoAction
-	const agregarProducto = producto => dispatch( crearNuevoProducto( producto ) )
+	// acceder al state del store
+	const { loading, error } = useSelector(state=> state.productos)
 
 	// cuando el usuario haga submit
 	const handleSubmit = e=> {
@@ -29,7 +31,11 @@ const NuevoProducto = () => {
 
 
 		// crear el nuevo producto
-		agregarProducto({ nombre, precio });
+		dispatch( crearNuevoProducto( {nombre, precio} ) )
+
+		
+		// redireccionar
+		navigate('/');
 	}
 
 	
@@ -68,12 +74,20 @@ const NuevoProducto = () => {
 								/>
 
 							</div>
-			<button
-				type='submit'
-				className='btn btn-primary font-weight-bold text-uppercase d-block w-100'
-			>Agregar</button>
+							<button
+								type='submit'
+								className='btn btn-primary font-weight-bold text-uppercase d-block w-100'
+							>Agregar</button>
 
 						</form>
+						{
+							loading &&
+							<p>Cargando....</p>
+						}
+						{
+							error &&
+							<p className='alert alert-danger p2 mt-4 text-center'>Hubo un Error</p>
+						}
 					</div>
 				</div>
 			</div>
