@@ -79,4 +79,40 @@ const descargaProductosExitosa= productos =>({
 const descargaProductosError = ()=> ({
     type: types.DESCARGA_PRODUCTOS_ERROR,
     payload: true
+});
+
+// Selecciona y Elimina el Producto
+export const borrarProductoAction = id=>{
+    return async (dispatch) =>{
+        dispatch( obtenerProductoEliminar( id ) );
+        
+        try { 
+            
+            const data = await clienteAxios.delete(`/productos/${ id }`);
+
+            dispatch( eliminarProductoExito() );
+
+            // si se elimina mostrar alerta
+            Swal.fire(
+                'Elimiando',
+                'El Producto se elimino correctamente',
+                'success'
+              )
+        } catch (error) {
+            // console.log(error);
+            dispatch( eliminarProductoerror() );
+        }
+    }
+}
+
+const obtenerProductoEliminar = id => ({
+    type: types.OBTENER_PRODUCTO_ELIMINAR,
+    payload: id
+});
+const eliminarProductoExito =()=>({
+    type: types.PRODUCTO_ELIMINADO_EXITO,
+});
+const eliminarProductoerror= ()=>({
+    type: types.PRODUCTO_ELIMINADO_ERROR,
+    payload: true
 })

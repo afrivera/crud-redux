@@ -4,7 +4,8 @@ import types from "../types";
 const initialState = {
     productos: [],
     error: null,
-    loading: false
+    loading: false,
+    productoEliminar: null
 }
 
 const productosReducer = (state = initialState, action)=> {
@@ -21,6 +22,7 @@ const productosReducer = (state = initialState, action)=> {
                 loading: false,
                 productos: [...state.productos, action.payload]
             }
+        case types.PRODUCTO_ELIMINADO_ERROR:
         case types.DESCARGA_PRODUCTOS_ERROR:
         case types.AGREGAR_PRODUCTO_ERROR:
             return {
@@ -35,6 +37,17 @@ const productosReducer = (state = initialState, action)=> {
                 error: null,
                 productos: action.payload
 
+            }
+        case types.OBTENER_PRODUCTO_ELIMINAR:
+            return {
+                ...state,
+                productoEliminar: action.payload
+            }
+        case types.PRODUCTO_ELIMINADO_EXITO:
+            return {
+                ...state,
+                productos: state.productos.filter( producto => producto.id !== state.productoEliminar),
+                productoEliminar: null
             }
         default:
             return state;
