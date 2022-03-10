@@ -50,3 +50,33 @@ const agregarProductoError = estado =>({
     type: types.AGREGAR_PRODUCTO_ERROR,
     payload: estado
 })
+
+// FUNCION PARA  OBTENER PRODUCTOS
+export const obtenerProductosAction = ()=>{
+    return async (dispatch) => {
+        dispatch(descargarProductos() );
+
+        try {
+            const { data } = await clienteAxios.get('productos');
+            
+            dispatch( descargaProductosExitosa( data ) );
+        } catch (error) {
+            dispatch( descargaProductosError() );
+        }
+    }
+}
+
+const descargarProductos = ()=> ({
+    type: types.COMENZAR_DESCARGA_PRODUCTOS,
+    payload: true
+});
+
+const descargaProductosExitosa= productos =>({
+    type: types.DESCARGA_PRODUCTOS_EXITO,
+    payload: productos
+});
+
+const descargaProductosError = ()=> ({
+    type: types.DESCARGA_PRODUCTOS_ERROR,
+    payload: true
+})
