@@ -88,7 +88,7 @@ export const borrarProductoAction = id=>{
         
         try { 
             
-            const data = await clienteAxios.delete(`/productos/${ id }`);
+            await clienteAxios.delete(`/productos/${ id }`);
 
             dispatch( eliminarProductoExito() );
 
@@ -114,5 +114,48 @@ const eliminarProductoExito =()=>({
 });
 const eliminarProductoerror= ()=>({
     type: types.PRODUCTO_ELIMINADO_ERROR,
+    payload: true
+});
+
+// colocar producto en edicion
+export const obtenerProductoEditarAction = (producto)=> {
+    return (dispatch) => {
+        dispatch( obtenerProductoEditar(producto));
+    }
+}
+
+const obtenerProductoEditar=(producto)=>({
+    type: types.OBTENER_PRODUCTO_EDITAR,
+    payload: producto
+})
+
+// edita un registro en la api y state
+export const editarProductoAction = producto => {
+    return async dispatch => {
+        dispatch( editarProducto ());
+
+        try {
+            await clienteAxios.put(`/productos/${ producto.id }`, producto);
+            
+            dispatch(editarProductoExito(producto));
+            
+        } catch (error) {
+            console.log(error);
+            dispatch( editarProductoError() );
+        }
+    }
+}
+
+const editarProducto = () =>({
+    type: types.COMENZAR_EDICION_PRODUCTO
+});
+
+const editarProductoExito= producto =>({
+    type: types.COMENZAR_EDICION_PRODUCTO,
+    payload: producto
+});
+
+const editarProductoError = ()=>({
+    type: types.PRODUCTO_EDITADO_ERROR,
     payload: true
 })

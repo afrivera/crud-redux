@@ -1,18 +1,18 @@
 {
   "productos": [
     {
-      "nombre": "Jugo de Fresa",
-      "precio": "200",
+      "nombre": "Jugo de Fres",
+      "precio": "100",
       "id": 5
     },
     {
       "nombre": "Teclado",
-      "precio": 400,
+      "precio": "300",
       "id": 6
     },
     {
       "nombre": "jugo de maracuya",
-      "precio": 5,
+      "precio": "900",
       "id": 7
     }
   ]

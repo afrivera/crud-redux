@@ -5,7 +5,8 @@ const initialState = {
     productos: [],
     error: null,
     loading: false,
-    productoEliminar: null
+    productoEliminar: null,
+    productoEditar: null
 }
 
 const productosReducer = (state = initialState, action)=> {
@@ -22,6 +23,7 @@ const productosReducer = (state = initialState, action)=> {
                 loading: false,
                 productos: [...state.productos, action.payload]
             }
+        case types.PRODUCTO_EDITADO_ERROR:
         case types.PRODUCTO_ELIMINADO_ERROR:
         case types.DESCARGA_PRODUCTOS_ERROR:
         case types.AGREGAR_PRODUCTO_ERROR:
@@ -48,6 +50,17 @@ const productosReducer = (state = initialState, action)=> {
                 ...state,
                 productos: state.productos.filter( producto => producto.id !== state.productoEliminar),
                 productoEliminar: null
+            }
+        case types.OBTENER_PRODUCTO_EDITAR:
+            return {
+                ...state,
+                productoEditar: action.payload
+            }
+        case types.PRODUCTO_EDITADO_EXITO:
+            return {
+                ...state,
+                productoEditar: null,
+                productos: state.productos.map(producto => producto.id === action.payload.id ? producto = action.payload : producto )
             }
         default:
             return state;
