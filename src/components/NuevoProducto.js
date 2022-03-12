@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 // actions de redux
 import { crearNuevoProducto } from '../actions/productoAction'
+import { mostrarAlertaAction, ocultarAlertaAction } from '../actions/alertaAction'
 
 const NuevoProducto = () => {
 
@@ -16,7 +17,8 @@ const NuevoProducto = () => {
 	const dispatch = useDispatch();
 
 	// acceder al state del store
-	const { loading, error } = useSelector(state=> state.productos)
+	const { loading, error } = useSelector(state=> state.productos);
+	const { alerta } = useSelector( state => state.alerta);
 
 	// cuando el usuario haga submit
 	const handleSubmit = e=> {
@@ -24,11 +26,16 @@ const NuevoProducto = () => {
 
 		// validar formulario
 		if( nombre.trim() === '' || precio <=0) {
+			const alerta = {
+				msg: 'Ambos Campos son Obligatorios',
+				classes: 'alert alert-danger text-center text-uppercase p3'
+			}
+			dispatch( mostrarAlertaAction( alerta ) );
 			return;
 		}
 
 		// si no hay errores
-
+		dispatch( ocultarAlertaAction() );
 
 		// crear el nuevo producto
 		dispatch( crearNuevoProducto( {nombre, precio} ) )
@@ -47,6 +54,10 @@ const NuevoProducto = () => {
 						<h2 className='text-center mb-4 font-weight-bold'>
 							Agregar Nuevo Producto
 						</h2>
+						{
+							alerta && 
+							<p className={ alerta.classes }>{alerta.msg}</p>
+						}
 
 						<form
 							onSubmit={handleSubmit}
